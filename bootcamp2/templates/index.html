@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url('https://t4.ftcdn.net/jpg/06/57/34/19/360_F_657341952_E8I9NuyOn7Rle6rMgx0QDou5vt695P4I.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+        .card-header {
+            background: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #007bff;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header">
+                        User Information
+                    </div>
+                    <div class="card-body">
+                        <form id="myForm">
+                            <div class="form-group mb-3">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="birthdate">Birthdate:</label>
+                                <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Display</button>
+                        </form>
+                        <div id="result" class="mt-4"></div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function() {
+            $('#myForm').on('submit', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/process_form',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#result').html(
+                            `<div class="alert alert-success">
+                                <h4 class="alert-heading">Results:</h4>
+                                <p><strong>Name:</strong> ${response.name}</p>
+                                <p><strong>Birthdate:</strong> ${response.birthdate}</p>
+                                <p><strong>Age:</strong> ${response.age}</p>
+                            </div>`
+                        );
+                    },
+                    error: function() {
+                        $('#result').html(
+                            `<div class="alert alert-danger">Error submitting form!</div>`
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
